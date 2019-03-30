@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t cohenshay/complex-aws -f ./clinet/Dockerfile.dev ./clinet/Dockerfile.dev
+  - docker build -t cohenshay/complex-aws -f ./client/Dockerfile.dev ./client/Dockerfile.dev
 
 script:
   - docker run cohenshay/complex-aws npm test -- --coverage
