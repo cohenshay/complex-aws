@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t cohenshay/complex-aws -f ./clinet/Dockerfile.dev ./clinet/Dockerfile.dev
+
+script:
+  - docker run cohenshay/complex-aws npm test -- --coverage
+
+after_success:
+  - docker build -t cohenshay/multi-client ./client
+  - docker build -t cohenshay/multi-nginx ./nginx
+  - docker build -t cohenshay/multi-server ./server
+  - docker build -t cohenshay/multi-worker ./worker
+  #log in to docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #push to docker hub
+  - docker push cohenshay/multi-client
+  - docker push cohenshay/multi-nginx
+  - docker push cohenshay/multi-server
+  - docker push cohenshay/multi-worker
